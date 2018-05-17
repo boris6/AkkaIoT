@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingMonitor", "BuildingMonitor\BuildingMonitor.csproj", "{93D27956-F46C-4E5F-BCB8-7EA217AC2CED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingMonitor.Test", "BuildingMonitor.Test\BuildingMonitor.Test.csproj", "{FA9B9207-8CF0-49C2-8CBD-8900C11E3D75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93D27956-F46C-4E5F-BCB8-7EA217AC2CED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D27956-F46C-4E5F-BCB8-7EA217AC2CED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D27956-F46C-4E5F-BCB8-7EA217AC2CED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D27956-F46C-4E5F-BCB8-7EA217AC2CED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA9B9207-8CF0-49C2-8CBD-8900C11E3D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA9B9207-8CF0-49C2-8CBD-8900C11E3D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA9B9207-8CF0-49C2-8CBD-8900C11E3D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA9B9207-8CF0-49C2-8CBD-8900C11E3D75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52BBAC46-FE28-45DB-8553-F0901BA180F2}
+	EndGlobalSection
+EndGlobal
