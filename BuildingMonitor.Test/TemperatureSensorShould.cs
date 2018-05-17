@@ -34,5 +34,36 @@ namespace BuildingMonitor.Test
 
             Assert.Null(received.Temperature);
         }
+
+        [Fact]
+        public void ConfirmTemperatureUpdate()
+        {
+            var probe = CreateTestProbe();
+
+            var sensor = Sys.ActorOf(TemperatureSensor.Props("a", "1"));
+
+            sensor.Tell(new RequestUpdateTemperature(42, 100), probe.Ref);
+
+            probe.ExpectMsg<RespondTemperatureUpdated>(m => Assert.Equal(42, m.RequestId));
+        }
+
+        [Fact]
+        public void UpdateNewTemperature()
+        {
+            var probe = CreateTestProbe();
+
+            var sensor = Sys.ActorOf(TemperatureSensor.Props("a", "1"));
+
+            sensor.Tell(new RequestUpdateTemperature(42, 100), probe.Ref);
+            sensor.Tell(new RequestTemperature(1), probe.Ref);
+
+
+            var receivedFirst = probe.ExpectMsg<RespondTemperatureUpdated>();
+            var received = probe.ExpectMsg<RespondTemperature>();
+
+            Assert.Equal(100, received.Temperature);
+            Assert.Equal(1, received.RequestId);
+        }
+
     }
 }

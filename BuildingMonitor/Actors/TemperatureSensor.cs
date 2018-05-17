@@ -7,7 +7,7 @@ namespace BuildingMonitor.Actors
     {
         private string _sensorId;
         private string _floorId;
-        private double? lastRecordedTemperature;
+        private double? _lastRecordedTemperature;
 
         protected override void OnReceive(object message)
         {
@@ -18,7 +18,12 @@ namespace BuildingMonitor.Actors
                     break;
 
                 case RequestTemperature m:
-                    Sender.Tell(new RespondTemperature(m.RequestId, lastRecordedTemperature));
+                    Sender.Tell(new RespondTemperature(m.RequestId, _lastRecordedTemperature));
+                    break;
+
+                case RequestUpdateTemperature m:
+                    _lastRecordedTemperature = m.Temperature;
+                    Sender.Tell(new RespondTemperatureUpdated(m.RequestId));
                     break;
 
                 default:
