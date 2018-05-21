@@ -57,12 +57,62 @@ namespace BuildingMonitor.Test
             sensor.Tell(new RequestUpdateTemperature(42, 100), probe.Ref);
             sensor.Tell(new RequestTemperature(1), probe.Ref);
 
-
             var receivedFirst = probe.ExpectMsg<RespondTemperatureUpdated>();
             var received = probe.ExpectMsg<RespondTemperature>();
 
             Assert.Equal(100, received.Temperature);
             Assert.Equal(1, received.RequestId);
+        }
+
+        [Fact]
+        public void RegisterSensor()
+        {
+            var probe = CreateTestProbe();
+
+            var sensor = Sys.ActorOf(TemperatureSensor.Props("a", "1"));
+
+            sensor.Tell(new RequestRegisterTemperatureSensor(1, "a", "1"), probe.Ref);
+
+            var received = probe.ExpectMsg<RespondSensorRegistered>();
+
+            Assert.Equal(1, received.RequestId);
+            Assert.Equal(sensor, received.SensorReference);
+        }
+
+        [Fact]
+        public void NotRegisteredSensorWhenIncorrectFloor()
+        {
+            var probe = CreateTestProbe();
+            var eventStreamProbe = CreateTestProbe();
+
+            Sys.EventStream.Subscribe(eventStreamProbe, typeof(Akka.Event.UnhandledMessage));
+
+            var sensor = Sys.ActorOf(TemperatureSensor.Props("a", "1"));
+            sensor.Tell(new RequestRegisterTemperatureSensor(1, "b", "1"), probe.Ref);
+
+            probe.ExpectNoMsg();
+
+            var unhandled = eventStreamProbe.ExpectMsg<Akka.Event.UnhandledMessage>();
+
+            Assert.IsType<RequestRegisterTemperatureSensor>(unhandled.Message);
+        }
+
+        [Fact]
+        public void NotRegisteredSensorWhenIncorrectSensorId()
+        {
+            var probe = CreateTestProbe();
+            var eventStreamProbe = CreateTestProbe();
+
+            Sys.EventStream.Subscribe(eventStreamProbe, typeof(Akka.Event.UnhandledMessage));
+
+            var sensor = Sys.ActorOf(TemperatureSensor.Props("a", "1"));
+            sensor.Tell(new RequestRegisterTemperatureSensor(1, "a", "2"), probe.Ref);
+
+            probe.ExpectNoMsg();
+
+            var unhandled = eventStreamProbe.ExpectMsg<Akka.Event.UnhandledMessage>();
+
+            Assert.IsType<RequestRegisterTemperatureSensor>(unhandled.Message);
         }
 
     }
