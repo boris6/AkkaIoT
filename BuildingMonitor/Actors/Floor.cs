@@ -1,11 +1,13 @@
 ﻿using Akka.Actor;
 using BuildingMonitor.Messages;
+using System.Collections.Generic;
 
 namespace BuildingMonitor.Actors
 {
     public class Floor : UntypedActor
     {
         private string _floorId;
+        private Dictionary<string, IActorRef> _sensorIdToActorRefMap = new Dictionary<string, IActorRef>();
 
         public Floor(string floorId)
         {
@@ -17,9 +19,18 @@ namespace BuildingMonitor.Actors
             switch (message)
             {
                 case RequestRegisterTemperatureSensor m:
-                    var newSensorActor = Context.ActorOf(TemperatureSensor.Props(_floorId, m.SensorId),
-                        $"temperature-sensor-{m.SensorId}");
-                    newSensorActor.Forward(m);
+                    if (_sensorIdToActorRefMap.TryGetValue(m.SensorId, out var existingActorRef))
+                    {
+                        existingActorRef.Forward(m);
+                    }
+                    else
+                    {
+                        var newSensorActor = Context.ActorOf(TemperatureSensor.Props(_floorId, m.SensorId),
+                            $"temperature-sensor-{m.SensorId}");
+                        _sensorIdToActorRefMap.Add(m.SensorId, newSensorActor);
+                        newSensorActor.Forward(m);
+                    }
+
                     break;
 
                 default:
